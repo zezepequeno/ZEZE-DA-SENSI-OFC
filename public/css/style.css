@@ -1,5 +1,5 @@
 /* ===============================
-   RESET BÁSICO
+   RESET
 ================================ */
 * {
   margin: 0;
@@ -11,155 +11,246 @@
    BODY
 ================================ */
 body {
-  font-family: Arial, Helvetica, sans-serif;
-  background: linear-gradient(180deg, #0a0a0a, #111);
+  font-family: 'Orbitron', sans-serif;
+  background: radial-gradient(circle at top, #111 0%, #000 70%);
   color: #fff;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  overflow-x: hidden;
 }
 
 /* ===============================
-   CARD PADRÃO
+   BACKGROUND EFFECTS
+================================ */
+.bg-effects {
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255,140,0,0.15), transparent 40%),
+    radial-gradient(circle at 80% 30%, rgba(0,170,255,0.15), transparent 45%),
+    radial-gradient(circle at 50% 80%, rgba(255,0,100,0.12), transparent 40%);
+  animation: pulseBg 6s infinite alternate;
+  z-index: -1;
+}
+
+@keyframes pulseBg {
+  from { filter: brightness(1); }
+  to { filter: brightness(1.3); }
+}
+
+/* ===============================
+   CONTAINER
+================================ */
+.container {
+  max-width: 420px;
+  margin: auto;
+  padding: 25px 16px 40px;
+  text-align: center;
+}
+
+/* ===============================
+   LOGO
+================================ */
+.logo {
+  font-size: 2.2rem;
+  font-weight: 900;
+  margin-bottom: 10px;
+  text-shadow: 0 0 15px #ff9900;
+  animation: glow 2s infinite alternate;
+}
+
+@keyframes glow {
+  from { text-shadow: 0 0 10px #ff9900; }
+  to { text-shadow: 0 0 25px #ff5500; }
+}
+
+/* ===============================
+   SUBTITLE
+================================ */
+.subtitle {
+  font-size: 0.95rem;
+  opacity: 0.9;
+  margin-bottom: 25px;
+}
+
+.subtitle span {
+  color: #00c3ff;
+  font-weight: 700;
+}
+
+/* ===============================
+   CARD
 ================================ */
 .card {
-  background: #151515;
+  background: rgba(20, 20, 20, 0.85);
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 0 25px rgba(255,140,0,0.25);
+  margin-bottom: 20px;
+}
+
+/* ===============================
+   LOGIN BUTTON
+================================ */
+.btn-login {
+  width: 100%;
+  padding: 14px;
+  font-size: 1rem;
+  font-weight: 700;
+  border: none;
   border-radius: 12px;
-  padding: 24px;
-  width: 100%;
-  max-width: 360px;
-  margin: 12px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
-  text-align: center;
-}
-
-/* ===============================
-   CENTRALIZAR
-================================ */
-.center {
-  text-align: center;
-}
-
-/* ===============================
-   ESCONDER
-================================ */
-.hidden {
-  display: none;
-}
-
-/* ===============================
-   TÍTULOS
-================================ */
-h1 {
-  font-size: 22px;
-  margin-bottom: 10px;
-  color: #00ff88;
-}
-
-h2 {
-  font-size: 18px;
-  margin-bottom: 12px;
-}
-
-/* ===============================
-   TEXTOS
-================================ */
-p {
-  font-size: 14px;
-  margin-bottom: 10px;
-  color: #ccc;
-}
-
-/* ===============================
-   BOTÕES
-================================ */
-button {
-  width: 100%;
-  padding: 12px;
-  border: none;
-  border-radius: 8px;
-  background: linear-gradient(135deg, #00ff88, #00cc66);
+  background: linear-gradient(135deg, #ff8c00, #ff3d00);
   color: #000;
-  font-weight: bold;
   cursor: pointer;
-  margin-top: 10px;
-  transition: transform 0.15s ease, opacity 0.15s ease;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-button:hover {
-  transform: scale(1.03);
-  opacity: 0.95;
-}
-
-/* ===============================
-   BOTÃO LOGOUT
-================================ */
-button.logout {
-  background: #ff4444;
-  color: #fff;
+.btn-login:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px #ff8c00;
 }
 
 /* ===============================
-   SELECT / INPUT
+   PERFIL
 ================================ */
-select,
-input {
-  width: 100%;
-  padding: 10px;
-  border-radius: 8px;
+.perfil {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  font-size: 0.85rem;
+}
+
+/* ===============================
+   STATUS
+================================ */
+.status {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+.status.free {
+  background: #444;
+  color: #aaa;
+}
+
+.status.vip {
+  background: linear-gradient(135deg, #ffd700, #ff9d00);
+  color: #000;
+}
+
+/* ===============================
+   LOGOUT
+================================ */
+.btn-logout {
+  background: #ff3b3b;
   border: none;
-  margin-top: 8px;
-  background: #222;
-  color: #fff;
-}
-
-/* ===============================
-   STATUS VIP
-================================ */
-#vipStatus {
-  font-weight: bold;
-}
-
-.free {
-  color: #ff5555;
-}
-
-.vip {
-  color: #00ff88;
-}
-
-/* ===============================
-   CTA VIP
-================================ */
-.vip-box {
-  margin-top: 15px;
-  padding: 12px;
   border-radius: 8px;
-  background: #1d1d1d;
-  border: 1px solid #333;
+  padding: 6px 10px;
+  color: #fff;
+  cursor: pointer;
 }
 
-.vip-box p {
-  margin-bottom: 8px;
+/* ===============================
+   PAINEL
+================================ */
+.painel h2 {
+  margin-bottom: 15px;
+  text-shadow: 0 0 10px #00c3ff;
+}
+
+/* ===============================
+   INPUT
+================================ */
+#modelo {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  margin-bottom: 12px;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+/* ===============================
+   GERAR BUTTON
+================================ */
+.btn-gerar {
+  width: 100%;
+  padding: 12px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #00c3ff, #0077ff);
+  color: #000;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.btn-gerar:hover {
+  transform: scale(1.05);
+}
+
+/* ===============================
+   VIP CTA
+================================ */
+.vip-cta {
+  margin-top: 15px;
+  padding: 14px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ffd700, #ff8c00);
+  color: #000;
+  font-weight: 800;
+  animation: shake 1.5s infinite;
+}
+
+.vip-cta a {
+  display: inline-block;
+  margin-top: 6px;
+  color: #000;
+  text-decoration: none;
+}
+
+@keyframes shake {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
 }
 
 /* ===============================
    RESULTADO
 ================================ */
-#resultado {
-  margin-top: 15px;
-  font-size: 14px;
-  color: #eee;
+.resultado {
+  margin-top: 18px;
 }
 
 /* ===============================
-   FOOTER
+   SENSI CARD (IA)
 ================================ */
-footer {
-  margin-top: auto;
-  padding: 12px;
-  font-size: 12px;
-  color: #777;
+.sensi-card {
+  padding: 16px;
+  border-radius: 14px;
+  margin-top: 10px;
+  animation: fadeUp 0.5s ease;
+}
+
+.sensi-card.free {
+  background: rgba(80, 80, 80, 0.3);
+}
+
+.sensi-card.vip {
+  background: linear-gradient(135deg, #222, #111);
+  border: 1px solid #ffd700;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
