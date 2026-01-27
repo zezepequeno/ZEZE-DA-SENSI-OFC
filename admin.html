@@ -2,19 +2,18 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Sensi FF Pro</title>
+  <title>🔥 Painel Admin — ZEZÉ DA SENSI</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- CSS -->
   <link rel="stylesheet" href="css/style.css" />
 
-  <!-- Firebase + App -->
+  <!-- Firebase -->
   <script type="module" src="js/firebase.js"></script>
-  <script type="module" src="js/index.js"></script>
-  <script type="module" src="js/sensi.js"></script>
+  <script type="module" src="js/admin.js"></script>
 </head>
 
 <body>
+
   <!-- LOGIN -->
   <div id="loginBox" class="card center">
     <h1>🔥 SENSI FF PRO</h1>
@@ -23,39 +22,39 @@
   </div>
 
   <!-- PERFIL -->
-  <div id="perfil" class="card hidden">
+  <div id="perfil" class="card" style="display:none;">
     <p><strong>Email:</strong> <span id="email"></span></p>
     <p>
       <strong>Status:</strong>
-      <span id="vipStatus" class="free">FREE</span>
+      <span id="vipStatus" class="free">ADMIN</span>
     </p>
     <button onclick="logout()" class="logout">Sair</button>
   </div>
 
   <!-- PAINEL -->
-  <div id="painel" class="card hidden">
-    <h2>⚙️ Gerador de Sensibilidade</h2>
+  <div id="painel" class="card" style="display:none;">
+    <h2>⚙️ Painel Administrativo</h2>
 
-    <select id="modelo">
-      <option value="">Selecione seu celular</option>
-      <option value="Samsung">Samsung</option>
-      <option value="Xiaomi">Xiaomi</option>
-      <option value="Motorola">Motorola</option>
-      <option value="iPhone">iPhone</option>
-    </select>
+    <p>Total de usuários: <strong id="totalUsers">0</strong></p>
+    <p>Usuários VIP: <strong id="vipUsers">0</strong></p>
 
-    <button onclick="gerarSensi()">Gerar Sensibilidade</button>
-
-    <div id="vipCTA" class="vip-box hidden">
-      <p>🔒 Conteúdo exclusivo para VIP</p>
-      <button>Ativar VIP</button>
-    </div>
-
-    <div id="resultado"></div>
+    <table>
+      <thead>
+        <tr>
+          <th>Email</th>
+          <th>UID</th>
+          <th>Status</th>
+          <th>VIP</th>
+          <th>Ação</th>
+        </tr>
+      </thead>
+      <tbody id="lista"></tbody>
+    </table>
   </div>
 
   <footer>
-    <p>© 2026 • Sensi FF Pro</p>
+    <p>© 2026 • ZEZÉ DA SENSI</p>
   </footer>
+
 </body>
 </html>
