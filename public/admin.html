@@ -1,1 +1,43 @@
 
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>⚙️ Painel Admin — Free Fire</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="css/style.css" />
+
+  <script type="module" src="js/admin.js"></script>
+</head>
+<body class="admin-bg">
+
+  <div class="admin-container">
+    <h1>⚙️ PAINEL ADMIN</h1>
+    <p class="admin-sub">
+      Controle de usuários VIP — Sistema Free Fire 🎮🔥
+    </p>
+
+    <div class="admin-box">
+      <label>Email do usuário</label>
+      <input
+        type="email"
+        id="userEmail"
+        placeholder="email@gmail.com"
+      />
+
+      <button id="btnVip">
+        ⭐ ATIVAR / DESATIVAR VIP
+      </button>
+
+      <div id="statusMsg"></div>
+    </div>
+
+    <button class="btn-voltar" onclick="location.href='index.html'">
+      ⬅️ Voltar para o site
+    </button>
+  </div>
+
+</body>
+</html>
