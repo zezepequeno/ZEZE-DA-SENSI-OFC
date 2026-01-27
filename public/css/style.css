@@ -1,231 +1,165 @@
 /* ===============================
-   RESET + BASE
+   RESET BÁSICO
 ================================ */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Orbitron', sans-serif;
 }
 
+/* ===============================
+   BODY
+================================ */
 body {
-  min-height: 100vh;
-  background: radial-gradient(circle at top, #1a0000, #000);
+  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(180deg, #0a0a0a, #111);
   color: #fff;
-  overflow-x: hidden;
-}
-
-/* ===============================
-   FUNDO ANIMADO
-================================ */
-.bg-effects {
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(circle at 20% 20%, rgba(255,80,0,.15), transparent 40%),
-    radial-gradient(circle at 80% 30%, rgba(255,200,0,.12), transparent 45%),
-    radial-gradient(circle at 50% 80%, rgba(255,0,0,.1), transparent 50%);
-  animation: bgMove 12s infinite alternate ease-in-out;
-  z-index: -1;
-}
-
-@keyframes bgMove {
-  0% { filter: hue-rotate(0deg); }
-  100% { filter: hue-rotate(20deg); }
-}
-
-/* ===============================
-   CONTAINER
-================================ */
-.container {
-  max-width: 420px;
-  margin: auto;
-  padding: 30px 16px 60px;
-  text-align: center;
-}
-
-/* ===============================
-   LOGO / TITULO
-================================ */
-.logo {
-  font-size: 32px;
-  font-weight: 900;
-  color: #ffb400;
-  text-shadow:
-    0 0 10px #ff9900,
-    0 0 25px rgba(255,140,0,.8);
-  margin-bottom: 12px;
-}
-
-.subtitle {
-  font-size: 14px;
-  color: #ccc;
-  margin-bottom: 30px;
-}
-
-.subtitle span {
-  color: #ffb400;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 /* ===============================
    CARD PADRÃO
 ================================ */
 .card {
-  background: rgba(0,0,0,.6);
-  border-radius: 18px;
-  padding: 22px;
-  margin-bottom: 20px;
-  box-shadow:
-    0 0 20px rgba(255,120,0,.25),
-    inset 0 0 10px rgba(255,120,0,.15);
-  border: 1px solid rgba(255,160,0,.3);
-}
-
-/* ===============================
-   LOGIN
-================================ */
-.btn-login {
+  background: #151515;
+  border-radius: 12px;
+  padding: 24px;
   width: 100%;
-  padding: 16px;
-  font-size: 15px;
-  font-weight: 900;
+  max-width: 360px;
+  margin: 12px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+  text-align: center;
+}
+
+/* ===============================
+   CENTRALIZAR
+================================ */
+.center {
+  text-align: center;
+}
+
+/* ===============================
+   ESCONDER
+================================ */
+.hidden {
+  display: none;
+}
+
+/* ===============================
+   TÍTULOS
+================================ */
+h1 {
+  font-size: 22px;
+  margin-bottom: 10px;
+  color: #00ff88;
+}
+
+h2 {
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+/* ===============================
+   TEXTOS
+================================ */
+p {
+  font-size: 14px;
+  margin-bottom: 10px;
+  color: #ccc;
+}
+
+/* ===============================
+   BOTÕES
+================================ */
+button {
+  width: 100%;
+  padding: 12px;
   border: none;
-  border-radius: 14px;
-  cursor: pointer;
-  background: linear-gradient(135deg,#ffcc00,#ff8800);
-  color: #000;
-  box-shadow: 0 0 25px rgba(255,200,0,.8);
-  transition: transform .2s;
-}
-
-.btn-login:hover {
-  transform: scale(1.05);
-}
-
-/* ===============================
-   PERFIL
-================================ */
-.perfil {
-  margin-bottom: 20px;
-}
-
-.status {
-  display: inline-block;
-  margin-top: 8px;
-  padding: 6px 14px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 900;
-}
-
-.status.free {
-  background: #ff4444;
-}
-
-.status.vip {
-  background: linear-gradient(135deg,#00ff99,#00ccff);
-  color: #000;
-  box-shadow: 0 0 15px rgba(0,255,180,.8);
-}
-
-.btn-logout {
-  display: block;
-  margin: 12px auto 0;
-  background: none;
-  border: 1px solid #555;
-  color: #aaa;
-  padding: 6px 14px;
   border-radius: 8px;
+  background: linear-gradient(135deg, #00ff88, #00cc66);
+  color: #000;
+  font-weight: bold;
   cursor: pointer;
+  margin-top: 10px;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+button:hover {
+  transform: scale(1.03);
+  opacity: 0.95;
 }
 
 /* ===============================
-   PAINEL
+   BOTÃO LOGOUT
 ================================ */
-.painel h2 {
-  margin-bottom: 16px;
-  color: #ffb400;
+button.logout {
+  background: #ff4444;
+  color: #fff;
 }
 
+/* ===============================
+   SELECT / INPUT
+================================ */
+select,
 input {
   width: 100%;
-  padding: 14px;
-  border-radius: 12px;
+  padding: 10px;
+  border-radius: 8px;
   border: none;
-  margin-bottom: 14px;
-  outline: none;
-  background: #111;
+  margin-top: 8px;
+  background: #222;
   color: #fff;
-  font-size: 14px;
-  border: 1px solid #333;
-}
-
-input::placeholder {
-  color: #777;
 }
 
 /* ===============================
-   BOTÃO GERAR
+   STATUS VIP
 ================================ */
-.btn-gerar {
-  width: 100%;
-  padding: 15px;
-  font-size: 15px;
-  font-weight: 900;
-  border-radius: 14px;
-  border: none;
-  cursor: pointer;
-  background: linear-gradient(135deg,#ff0000,#ff9900);
-  color: #fff;
-  box-shadow: 0 0 30px rgba(255,80,0,.9);
-  animation: pulse 1.6s infinite;
+#vipStatus {
+  font-weight: bold;
 }
 
-@keyframes pulse {
-  0% { box-shadow: 0 0 15px rgba(255,120,0,.6); }
-  100% { box-shadow: 0 0 35px rgba(255,120,0,1); }
+.free {
+  color: #ff5555;
+}
+
+.vip {
+  color: #00ff88;
 }
 
 /* ===============================
    CTA VIP
 ================================ */
-.vip-cta {
-  margin-top: 16px;
-  font-size: 13px;
-  color: #ffb400;
+.vip-box {
+  margin-top: 15px;
+  padding: 12px;
+  border-radius: 8px;
+  background: #1d1d1d;
+  border: 1px solid #333;
 }
 
-.vip-cta a {
-  display: inline-block;
-  margin-top: 8px;
-  padding: 10px 16px;
-  background: linear-gradient(135deg,#00ff99,#00ccff);
-  color: #000;
-  border-radius: 12px;
-  font-weight: 900;
-  text-decoration: none;
+.vip-box p {
+  margin-bottom: 8px;
 }
 
 /* ===============================
    RESULTADO
 ================================ */
-.resultado {
-  margin-top: 20px;
-  text-align: left;
+#resultado {
+  margin-top: 15px;
   font-size: 14px;
-}
-
-.resultado h3 {
-  text-align: center;
-  margin-bottom: 10px;
-  color: #ffb400;
+  color: #eee;
 }
 
 /* ===============================
-   RESPONSIVO
+   FOOTER
 ================================ */
-@media (max-width: 480px) {
-  .logo {
-    font-size: 26px;
-  }
+footer {
+  margin-top: auto;
+  padding: 12px;
+  font-size: 12px;
+  color: #777;
 }
