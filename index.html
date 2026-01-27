@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>🔥 ZEZÉ DA SENSI — Free Fire</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- FONTE GAMER -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <!-- 🔥 FUNDO ANIMADO -->
+  <div class="bg-effects"></div>
+
+  <!-- 🔥 CONTAINER PRINCIPAL -->
+  <div class="container">
+
+    <!-- LOGO / TITULO -->
+    <h1 class="logo">
+      🔥 ZEZÉ DA SENSI 🔥
+    </h1>
+
+    <p class="subtitle">
+      🎮 Sensibilidade PRO • 💎 Estilo Free Fire  
+      <br>
+      <span>Domine o jogo como os PROS</span>
+    </p>
+
+    <!-- 🔐 LOGIN -->
+    <div id="loginBox" class="card">
+      <button class="btn-login" onclick="loginGoogle()">
+        🚀 LOGIN COM GOOGLE
+      </button>
+    </div>
+
+    <!-- 👤 PERFIL -->
+    <div id="perfil" class="perfil" style="display:none;">
+      <p>👤 <span id="email"></span></p>
+      <span id="vipStatus" class="status free">FREE</span>
+      <button class="btn-logout" onclick="logout()">Sair</button>
+    </div>
+
+    <!-- ⚙️ PAINEL -->
+    <div id="painel" class="card painel" style="display:none;">
+
+      <h2>🎯 GERADOR DE SENSIBILIDADE</h2>
+
+      <input
+        type="text"
+        id="modelo"
+        placeholder="📱 Ex: Galaxy A54, Redmi Note 12..."
+      />
+
+      <button class="btn-gerar" onclick="gerarSensi()">
+        ⚡ GERAR SENSI
+      </button>
+
+      <div id="vipCTA" class="vip-cta" style="display:none;">
+        💎 Desbloqueie resultados VIP  
+        <br>
+        <a href="https://wa.me/55SEUNUMERO" target="_blank">
+          👉 CHAMAR NO WHATSAPP
+        </a>
+      </div>
+
+      <div id="resultado" class="resultado"></div>
+
+    </div>
+
+  </div>
+
+  <!-- 🔥 SCRIPTS -->
+  <script type="module" src="js/firebase.js"></script>
+  <script type="module" src="js/index.js"></script>
+  <script type="module" src="js/sensi.js"></script>
+
+</body>
+</html>
