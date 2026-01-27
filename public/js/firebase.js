@@ -21,7 +21,8 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 /* ===============================
-   CONFIG DO SEU PROJETO
+   CONFIG DO PROJETO
+   (NÃO MEXER SE JÁ FUNCIONA)
 ================================ */
 const firebaseConfig = {
   apiKey: "AIzaSyBXrz_LFG44evIKLVBjYk4dYhaO9T2-FE0",
@@ -36,19 +37,27 @@ const firebaseConfig = {
    INIT
 ================================ */
 const app = initializeApp(firebaseConfig);
+
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const provider = new GoogleAuthProvider();
 
 /* ===============================
-   LOGIN GOOGLE (AUTO MOBILE)
+   LOGIN GOOGLE
+   (POPUP NO PC / REDIRECT NO MOBILE)
 ================================ */
 export async function loginGoogle() {
   const isMobile = /Android|iPhone/i.test(navigator.userAgent);
-  if (isMobile) {
-    await signInWithRedirect(auth, provider);
-  } else {
-    await signInWithPopup(auth, provider);
+
+  try {
+    if (isMobile) {
+      await signInWithRedirect(auth, provider);
+    } else {
+      await signInWithPopup(auth, provider);
+    }
+  } catch (err) {
+    console.error("Erro no login:", err);
+    alert("Erro ao fazer login. Tente novamente.");
   }
 }
 
@@ -56,31 +65,39 @@ export async function loginGoogle() {
    LOGOUT
 ================================ */
 export async function logout() {
-  await signOut(auth);
-  location.reload();
+  try {
+    await signOut(auth);
+    location.reload();
+  } catch (err) {
+    console.error("Erro no logout:", err);
+  }
 }
 
 /* ===============================
-   OBSERVAR LOGIN
+   OBSERVAR LOGIN (AUTH STATE)
 ================================ */
 export function watchAuth(callback) {
-  onAuthStateChanged(auth, callback);
+  onAuthStateChanged(auth, user => {
+    callback(user);
+  });
 }
 
 /* ===============================
-   CRIAR / PEGAR USUÁRIO
+   CRIAR OU BUSCAR USUÁRIO
 ================================ */
 export async function getOrCreateUser(user) {
   const ref = doc(db, "users", user.uid);
   const snap = await getDoc(ref);
 
   if (!snap.exists()) {
-    await setDoc(ref, {
+    const data = {
       email: user.email,
       vip: false,
       createdAt: Date.now()
-    });
-    return { email: user.email, vip: false };
+    };
+
+    await setDoc(ref, data);
+    return data;
   }
 
   return snap.data();
