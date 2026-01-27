@@ -1,4 +1,6 @@
-
+/* ===============================
+   FIREBASE IMPORTS
+================================ */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import {
   getAuth,
@@ -15,78 +17,102 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 /* ===============================
-   FIREBASE CONFIG
+   CONFIG FIREBASE
 ================================ */
 const firebaseConfig = {
   apiKey: "AIzaSyBXrz_LFG44evIKLVBjYk4dYhaO9T2-FE0",
   authDomain: "zeze-da-sensi-ofc.firebaseapp.com",
-  projectId: "zeze-da-sensi-ofc"
+  projectId: "zeze-da-sensi-ofc",
+  storageBucket: "zeze-da-sensi-ofc.appspot.com"
 };
 
+/* ===============================
+   EMAILS ADMIN AUTORIZADOS
+================================ */
 const ADM_EMAILS = ["rafaellaranga80@gmail.com"];
 
+/* ===============================
+   INIT
+================================ */
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
 /* ===============================
-   PROTEÇÃO ADMIN
+   ELEMENTOS DOM
+================================ */
+const totalUsersEl = document.getElementById("totalUsers");
+const vipUsersEl = document.getElementById("vipUsers");
+const listaEl = document.getElementById("lista");
+
+/* ===============================
+   PROTEÇÃO DE ACESSO ADMIN
 ================================ */
 onAuthStateChanged(auth, user => {
   if (!user || !ADM_EMAILS.includes(user.email)) {
-    alert("Acesso negado — Admin apenas.");
+    alert("⛔ Acesso restrito ao administrador");
     location.href = "index.html";
+    return;
   }
+
+  carregarUsuarios();
 });
 
 /* ===============================
-   ELEMENTOS
+   CARREGAR USUÁRIOS
 ================================ */
-const emailInput = document.getElementById("userEmail");
-const btnVip = document.getElementById("btnVip");
-const statusMsg = document.getElementById("statusMsg");
+async function carregarUsuarios() {
+  listaEl.innerHTML = "";
+  let total = 0;
+  let vipTotal = 0;
+
+  try {
+    const snap = await getDocs(collection(db, "users"));
+
+    snap.forEach(docSnap => {
+      total++;
+
+      const data = docSnap.data();
+      if (data.vip) vipTotal++;
+
+      const tr = document.createElement("tr");
+
+      tr.innerHTML = `
+        <td>${data.email}</td>
+        <td>${docSnap.id}</td>
+        <td class="${data.vip ? "vip" : "free"}">
+          ${data.vip ? "VIP" : "FREE"}
+        </td>
+        <td>${data.vip ? "ATIVO" : "-"}</td>
+        <td>
+          <button onclick="toggleVip('${docSnap.id}', ${data.vip})">
+            ${data.vip ? "Remover VIP" : "Ativar VIP"}
+          </button>
+        </td>
+      `;
+
+      listaEl.appendChild(tr);
+    });
+
+    totalUsersEl.innerText = total;
+    vipUsersEl.innerText = vipTotal;
+
+  } catch (e) {
+    console.error("Erro ao carregar usuários:", e);
+    alert("Erro ao carregar painel admin");
+  }
+}
 
 /* ===============================
    TOGGLE VIP
 ================================ */
-btnVip.addEventListener("click", async () => {
-  const email = emailInput.value.trim();
-
-  if (!email) {
-    statusMsg.innerText = "❌ Digite um email válido";
-    statusMsg.className = "erro";
-    return;
-  }
-
+window.toggleVip = async (uid, statusAtual) => {
   try {
-    const q = query(
-      collection(db, "users"),
-      where("email", "==", email)
-    );
-
-    const snap = await getDocs(q);
-
-    if (snap.empty) {
-      statusMsg.innerText = "❌ Usuário não encontrado";
-      statusMsg.className = "erro";
-      return;
-    }
-
-    snap.forEach(async docSnap => {
-      const ref = doc(db, "users", docSnap.id);
-      const atual = docSnap.data().vip;
-
-      await updateDoc(ref, { vip: !atual });
-
-      statusMsg.innerText = atual
-        ? "⚠️ VIP DESATIVADO"
-        : "✅ VIP ATIVADO COM SUCESSO";
-      statusMsg.className = "ok";
-    });
-
+    const ref = doc(db, "users", uid);
+    await updateDoc(ref, { vip: !statusAtual });
+    carregarUsuarios();
   } catch (e) {
-    console.error(e);
-    statusMsg.innerText = "❌ Erro ao atualizar VIP";
-    statusMsg.className = "erro";
+    console.error("Erro ao atualizar VIP:", e);
+    alert("Erro ao atualizar VIP");
   }
-});
+};
