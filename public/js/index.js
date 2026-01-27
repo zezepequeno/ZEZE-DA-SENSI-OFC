@@ -3,7 +3,6 @@
 ================================ */
 import {
   auth,
-  db,
   loginGoogle,
   logout,
   watchAuth,
@@ -15,47 +14,55 @@ import { GERAR_SENSI_IA } from "./sensi.js";
 /* ===============================
    CONFIG
 ================================ */
-const ADM_EMAILS = ["rafaellaranga80@gmail.com"];
+const ADM_EMAILS = ["rafaelaranga90@gmail.com"];
 const $ = id => document.getElementById(id);
 
 /* ===============================
-   BIND BOTÕES
+   EXPOR FUNÇÕES PRO HTML
 ================================ */
 window.loginGoogle = loginGoogle;
 window.logout = logout;
 
 /* ===============================
-   ESTADO DE LOGIN
+   CONTROLE DE LOGIN
 ================================ */
 watchAuth(async user => {
+
+  /* ---------- DESLOGADO ---------- */
   if (!user) {
-    $("loginBox").style.display = "block";
-    $("painel").style.display = "none";
-    $("perfil").style.display = "none";
+    if ($("loginBox")) $("loginBox").style.display = "block";
+    if ($("painel")) $("painel").style.display = "none";
+    if ($("perfil")) $("perfil").style.display = "none";
     return;
   }
 
-  // UI
-  $("loginBox").style.display = "none";
-  $("painel").style.display = "block";
-  $("perfil").style.display = "flex";
-  $("email").innerText = user.email;
+  /* ---------- LOGADO ---------- */
+  if ($("loginBox")) $("loginBox").style.display = "none";
+  if ($("painel")) $("painel").style.display = "block";
+  if ($("perfil")) $("perfil").style.display = "flex";
 
-  // USER DATA
+  if ($("email")) $("email").innerText = user.email;
+
+  /* ---------- DADOS DO USUÁRIO ---------- */
   const data = await getOrCreateUser(user);
 
-  // VIP
-  $("vipStatus").innerText = data.vip ? "VIP ATIVO 🔥" : "FREE";
-  $("vipStatus").className = data.vip ? "vip" : "free";
-  $("vipCTA").style.display = data.vip ? "none" : "block";
+  /* ---------- STATUS VIP ---------- */
+  if ($("vipStatus")) {
+    $("vipStatus").innerText = data.vip ? "VIP ATIVO 🔥" : "FREE";
+    $("vipStatus").className = data.vip ? "status vip" : "status free";
+  }
 
-  // ADMIN BUTTON (SÓ ADM)
+  if ($("vipCTA")) {
+    $("vipCTA").style.display = data.vip ? "none" : "block";
+  }
+
+  /* ---------- BOTÃO ADMIN (SÓ ADM) ---------- */
   if (ADM_EMAILS.includes(user.email)) {
-    if (!$("adminBtn")) {
+    if (!$("adminBtn") && $("painel")) {
       const btn = document.createElement("button");
       btn.id = "adminBtn";
-      btn.innerHTML = "⚙️ PAINEL ADMIN";
       btn.className = "admin-btn";
+      btn.innerHTML = "⚙️ PAINEL ADMIN";
       btn.onclick = () => location.href = "admin.html";
       $("painel").prepend(btn);
     }
@@ -66,18 +73,20 @@ watchAuth(async user => {
    GERAR SENSI
 ================================ */
 window.gerarSensi = () => {
-  const modelo = $("modelo").value.trim();
+  const modelo = $("modelo")?.value.trim();
 
   if (!modelo) {
-    alert("Digite o modelo do celular 🔍");
+    alert("Digite o modelo do celular");
     return;
   }
 
-  const vip = $("vipStatus").innerText.includes("VIP");
+  const vip = $("vipStatus")?.innerText.includes("VIP");
   const html = GERAR_SENSI_IA(modelo, vip);
 
-  $("resultado").innerHTML = `
-    <h3>🎯 SENSIBILIDADE IDEAL — FREE FIRE</h3>
-    ${html}
-  `;
+  if ($("resultado")) {
+    $("resultado").innerHTML = `
+      <h3>🎯 SENSIBILIDADE IDEAL — FREE FIRE</h3>
+      ${html}
+    `;
+  }
 };
