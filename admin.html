@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sensi FF Pro</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Firebase + App -->
+  <script type="module" src="js/firebase.js"></script>
+  <script type="module" src="js/index.js"></script>
+  <script type="module" src="js/sensi.js"></script>
+</head>
+
+<body>
+  <!-- LOGIN -->
+  <div id="loginBox" class="card center">
+    <h1>🔥 SENSI FF PRO</h1>
+    <p>Entre com sua conta para continuar</p>
+    <button onclick="loginGoogle()">Entrar com Google</button>
+  </div>
+
+  <!-- PERFIL -->
+  <div id="perfil" class="card hidden">
+    <p><strong>Email:</strong> <span id="email"></span></p>
+    <p>
+      <strong>Status:</strong>
+      <span id="vipStatus" class="free">FREE</span>
+    </p>
+    <button onclick="logout()" class="logout">Sair</button>
+  </div>
+
+  <!-- PAINEL -->
+  <div id="painel" class="card hidden">
+    <h2>⚙️ Gerador de Sensibilidade</h2>
+
+    <select id="modelo">
+      <option value="">Selecione seu celular</option>
+      <option value="Samsung">Samsung</option>
+      <option value="Xiaomi">Xiaomi</option>
+      <option value="Motorola">Motorola</option>
+      <option value="iPhone">iPhone</option>
+    </select>
+
+    <button onclick="gerarSensi()">Gerar Sensibilidade</button>
+
+    <div id="vipCTA" class="vip-box hidden">
+      <p>🔒 Conteúdo exclusivo para VIP</p>
+      <button>Ativar VIP</button>
+    </div>
+
+    <div id="resultado"></div>
+  </div>
+
+  <footer>
+    <p>© 2026 • Sensi FF Pro</p>
+  </footer>
+</body>
+</html>
