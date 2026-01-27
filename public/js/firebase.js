@@ -1,6 +1,5 @@
 /* ===============================
    FIREBASE CONFIG + INIT
-   Arquivo: js/firebase.js
 ================================ */
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -24,7 +23,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 /* ===============================
-   CONFIG DO PROJETO
+   CONFIG
 ================================ */
 const firebaseConfig = {
   apiKey: "AIzaSyBXrz_LFG44evIKLVBjYk4dYhaO9T2-FE0",
@@ -34,13 +33,10 @@ const firebaseConfig = {
 };
 
 /* ===============================
-   INIT APP
+   INIT
 ================================ */
 const app = initializeApp(firebaseConfig);
 
-/* ===============================
-   EXPORTS BASE
-================================ */
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const provider = new GoogleAuthProvider();
@@ -51,49 +47,36 @@ export const provider = new GoogleAuthProvider();
 export async function loginGoogle() {
   try {
     const isMobile = /Android|iPhone/i.test(navigator.userAgent);
-
     if (isMobile) {
       await signInWithRedirect(auth, provider);
     } else {
       await signInWithPopup(auth, provider);
     }
   } catch (e) {
-    console.error("Erro no login:", e);
-    alert("Erro ao fazer login. Tente novamente.");
+    alert("Erro ao fazer login");
+    console.error(e);
   }
 }
 
-/* ===============================
-   TRATAR REDIRECT (MOBILE)
-================================ */
-getRedirectResult(auth).catch(err => {
-  console.error("Redirect error:", err);
-});
+getRedirectResult(auth).catch(() => {});
 
 /* ===============================
    LOGOUT
 ================================ */
 export async function logout() {
-  try {
-    await signOut(auth);
-    location.reload();
-  } catch (e) {
-    console.error("Erro no logout:", e);
-    alert("Erro ao sair.");
-  }
+  await signOut(auth);
+  location.reload();
 }
 
 /* ===============================
-   OBSERVAR AUTH
+   OBSERVADOR
 ================================ */
-export function watchAuth(callback) {
-  return onAuthStateChanged(auth, user => {
-    callback(user || null);
-  });
+export function watchAuth(cb) {
+  return onAuthStateChanged(auth, user => cb(user || null));
 }
 
 /* ===============================
-   CRIAR / BUSCAR USUÁRIO
+   USER
 ================================ */
 export async function getOrCreateUser(user) {
   if (!user) return null;
@@ -107,7 +90,6 @@ export async function getOrCreateUser(user) {
       vip: false,
       createdAt: Date.now()
     };
-
     await setDoc(ref, data);
     return data;
   }
@@ -115,11 +97,7 @@ export async function getOrCreateUser(user) {
   return snap.data();
 }
 
-/* ===============================
-   ATUALIZAR VIP (ADMIN)
-================================ */
 export async function setVip(uid, status) {
   if (!uid) return;
-  const ref = doc(db, "users", uid);
-  await updateDoc(ref, { vip: status });
+  await updateDoc(doc(db, "users", uid), { vip: status });
 }
