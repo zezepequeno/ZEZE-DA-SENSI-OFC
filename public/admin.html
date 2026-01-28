@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>🔥 Painel Admin — ZEZÉ DA SENSI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Firebase -->
+  <script type="module" src="js/firebase.js"></script>
+  <script type="module" src="js/admin.js"></script>
+</head>
+
+<body>
+
+  <!-- LOGIN -->
+  <div id="loginBox" class="card center">
+    <h1>🔥 SENSI FF PRO</h1>
+    <p>Entre com sua conta para continuar</p>
+    <button onclick="loginGoogle()">Entrar com Google</button>
+  </div>
+
+  <!-- PERFIL -->
+  <div id="perfil" class="card" style="display:none;">
+    <p><strong>Email:</strong> <span id="email"></span></p>
+    <p>
+      <strong>Status:</strong>
+      <span id="vipStatus" class="free">ADMIN</span>
+    </p>
+    <button onclick="logout()" class="logout">Sair</button>
+  </div>
+
+  <!-- PAINEL -->
+  <div id="painel" class="card" style="display:none;">
+    <h2>⚙️ Painel Administrativo</h2>
+
+    <p>Total de usuários: <strong id="totalUsers">0</strong></p>
+    <p>Usuários VIP: <strong id="vipUsers">0</strong></p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Email</th>
+          <th>UID</th>
+          <th>Status</th>
+          <th>VIP</th>
+          <th>Ação</th>
+        </tr>
+      </thead>
+      <tbody id="lista"></tbody>
+    </table>
+  </div>
+
+  <footer>
+    <p>© 2026 • ZEZÉ DA SENSI</p>
+  </footer>
+
+</body>
+</html>
