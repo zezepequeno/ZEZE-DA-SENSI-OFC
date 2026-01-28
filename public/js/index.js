@@ -21,14 +21,11 @@ watchAuth(async (user) => {
         emailEl.textContent = user.email;
 
         const data = await getOrCreateUser(user);
-
-        if (data?.vip) {
+        if (data.vip) {
             vipStatus.textContent = "VIP";
-            vipStatus.className = "status vip";
             vipCTA.style.display = "none";
         } else {
             vipStatus.textContent = "FREE";
-            vipStatus.className = "status free";
             vipCTA.style.display = "block";
         }
     } else {
