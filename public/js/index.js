@@ -1,13 +1,14 @@
 import { loginGoogle, logout, watchAuth, getOrCreateUser } from "./firebase.js";
 import { GERAR_SENSI_IA } from "./sensi.js";
 
+// Coloque aqui o seu e-mail para que SÓ VOCÊ veja o botão de Admin
 const ADM_EMAILS = ["rafaelaranja90@gmail.com"];
 const $ = id => document.getElementById(id);
 
 window.loginGoogle = loginGoogle;
 window.logout = logout;
 
-watchAuth(async user => {
+watchAuth(async (user) => {
     if (!user) {
         $("loginBox").style.display = "block";
         $("perfil").style.display = "none";
@@ -15,25 +16,27 @@ watchAuth(async user => {
         return;
     }
 
+    // Se logou, mostra o Painel e o Perfil
     $("loginBox").style.display = "none";
     $("perfil").style.display = "block";
     $("painel").style.display = "block";
     $("email").innerText = user.email;
 
-    const data = await getOrCreateUser(user);
-    const isVip = data && data.vip === true;
+    const userData = await getOrCreateUser(user);
+    const isVip = userData && userData.vip === true;
 
     $("vipStatus").innerText = isVip ? "VIP ATIVO 🔥" : "FREE";
     $("vipStatus").className = `status ${isVip ? 'vip' : 'free'}`;
     $("vipCTA").style.display = isVip ? "none" : "block";
 
+    // Só cria o botão de Admin se o e-mail for o seu
     if (ADM_EMAILS.includes(user.email) && !$("adminBtn")) {
-        const btn = document.createElement("button");
-        btn.id = "adminBtn";
-        btn.innerText = "⚙️ PAINEL ADMIN";
-        btn.style.cssText = "margin-top:10px; background:#222; color:#fff; border:1px solid #444; padding:5px; border-radius:5px; cursor:pointer;";
-        btn.onclick = () => location.href = "admin.html";
-        $("perfil").appendChild(btn);
+        const adminBtn = document.createElement("button");
+        adminBtn.id = "adminBtn";
+        adminBtn.innerText = "⚙️ PAINEL ADMIN";
+        adminBtn.style.cssText = "background:#222; color:#fff; border:1px solid #555; padding:8px; border-radius:8px; cursor:pointer; margin-top:10px; width:100%; font-size:0.7rem;";
+        adminBtn.onclick = () => location.href = "admin.html";
+        $("perfil").appendChild(adminBtn);
     }
 });
 
