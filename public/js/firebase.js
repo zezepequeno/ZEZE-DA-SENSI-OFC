@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -12,25 +12,18 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
-export const provider = new GoogleAuthProvider();
+const provider = new GoogleAuthProvider();
 
 export async function loginGoogle() {
-  try {
-    await signInWithPopup(auth, provider);
-  } catch (e) {
-    console.error("Erro no login:", e);
-    alert("Erro ao entrar com Google.");
-  }
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if (isMobile) { await signInWithRedirect(auth, provider); } 
+  else { await signInWithPopup(auth, provider); }
 }
 
-export async function logout() {
-  await signOut(auth);
-  location.reload();
-}
+getRedirectResult(auth).catch(() => {});
 
-export function watchAuth(cb) {
-  onAuthStateChanged(auth, user => cb(user || null));
-}
+export async function logout() { await signOut(auth); location.reload(); }
+export function watchAuth(cb) { onAuthStateChanged(auth, user => cb(user || null)); }
 
 export async function getOrCreateUser(user) {
   if (!user) return null;
