@@ -2,7 +2,6 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 import { 
     getAuth, 
     GoogleAuthProvider, 
-    signInWithPopup, 
     signInWithRedirect, 
     getRedirectResult, 
     onAuthStateChanged, 
@@ -15,6 +14,9 @@ import {
     setDoc 
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+/* ===============================
+   FIREBASE CONFIG
+================================ */
 const firebaseConfig = {
     apiKey: "AIzaSyBXrz_LFG44evIKLVBjYk4dYhaO9T2-FE0",
     authDomain: "zeze-da-sensi-ofc.firebaseapp.com",
@@ -27,29 +29,49 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 
+/* ===============================
+   GOOGLE PROVIDER
+================================ */
 const provider = new GoogleAuthProvider();
-provider.setCustomParameters({ prompt: "select_account" });
+provider.setCustomParameters({
+    prompt: "select_account"
+});
 
+/* ===============================
+   LOGIN (REDIRECT ONLY)
+================================ */
 export async function loginGoogle() {
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    if (isMobile) {
+    try {
         await signInWithRedirect(auth, provider);
-    } else {
-        await signInWithPopup(auth, provider);
+    } catch (err) {
+        console.error("Erro login Google:", err);
+        alert("Erro ao tentar login com Google");
     }
 }
 
+/* ===============================
+   REDIRECT RESULT
+================================ */
 getRedirectResult(auth).catch(() => {});
 
+/* ===============================
+   LOGOUT
+================================ */
 export async function logout() {
     await signOut(auth);
     location.reload();
 }
 
+/* ===============================
+   AUTH OBSERVER
+================================ */
 export function watchAuth(callback) {
     onAuthStateChanged(auth, callback);
 }
 
+/* ===============================
+   FIRESTORE USER
+================================ */
 export async function getOrCreateUser(user) {
     if (!user) return null;
 
@@ -65,5 +87,6 @@ export async function getOrCreateUser(user) {
         await setDoc(userRef, data);
         return data;
     }
+
     return userSnap.data();
 }
