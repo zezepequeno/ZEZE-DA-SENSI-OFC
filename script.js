@@ -1,67 +1,98 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+// ===============================
+// SISTEMA PRINCIPAL ZEZÉ DA SENSI
+// ===============================
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBXrz_LFG44evIKLVBjYk4dYhaO9T2-FE0",
-  authDomain: "zeze-da-sensi-ofc.firebaseapp.com",
-  projectId: "zeze-da-sensi-ofc",
-  storageBucket: "zeze-da-sensi-ofc.appspot.com"
-};
+// Simulação de banco (localStorage)
+const DB_KEY = "zeze_users";
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const provider = new GoogleAuthProvider();
+// Utilidades
+function getDB() {
+    return JSON.parse(localStorage.getItem(DB_KEY)) || {};
+}
 
-// LOGIN GOOGLE
-window.loginGoogle = async () => {
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    if (isMobile) { await signInWithRedirect(auth, provider); } 
-    else { await signInWithPopup(auth, provider); }
-};
+function saveDB(db) {
+    localStorage.setItem(DB_KEY, JSON.stringify(db));
+}
 
-window.logout = () => signOut(auth).then(() => location.reload());
+// Login Google (SIMULADO PROFISSIONAL)
+window.loginGoogle = function () {
+    const email = prompt("Digite seu e-mail do Google:");
 
-// MONITOR DE LOGIN
-onAuthStateChanged(auth, async (user) => {
-    const loginBox = document.getElementById("loginBox");
-    const appUI = document.getElementById("app");
-    
-    if (user) {
-        loginBox.style.display = "none";
-        appUI.style.display = "block";
-        document.getElementById("userEmail").innerText = user.email;
-
-        const docRef = doc(db, "users", user.uid);
-        const docSnap = await getDoc(docRef);
-        
-        if (docSnap.exists() && docSnap.data().vip) {
-            document.getElementById("vipStatus").innerText = "VIP ATIVO 🔥";
-            document.getElementById("vipStatus").classList.add("active-vip");
-            document.getElementById("vipSection").style.display = "block";
-        } else {
-            await setDoc(docRef, { email: user.email, vip: false }, { merge: true });
-        }
-    } else {
-        loginBox.style.display = "block";
-        appUI.style.display = "none";
+    if (!email || !email.includes("@")) {
+        alert("E-mail inválido.");
+        return;
     }
-});
 
-// GERADOR
-window.gerarSensi = () => {
-    const modelo = document.getElementById("modeloCelular").value;
-    if (!modelo) return alert("Digite o modelo do celular!");
-    
-    const n = Math.floor(Math.random() * 10) + 90;
-    document.getElementById("resultadoSensi").innerHTML = `
-        <div class="res-box">
-            <p style="color:#888; font-size:0.7rem;">Sensi para ${modelo.toUpperCase()}</p>
-            <p>🔴 Geral: <b>${n}</b></p>
-            <p>🎯 Mira 2x: <b>${n-5}</b></p>
-            <p>🖱️ DPI: <b>600</b></p>
-        </div>
+    const db = getDB();
+
+    if (!db[email]) {
+        db[email] = {
+            email,
+            vip: false,
+            vipExpira: null
+        };
+        saveDB(db);
+    }
+
+    localStorage.setItem("usuario_logado", email);
+    carregarUsuario();
+};
+
+// Logout
+window.logout = function () {
+    localStorage.removeItem("usuario_logado");
+    location.reload();
+};
+
+// Carregar usuário
+function carregarUsuario() {
+    const email = localStorage.getItem("usuario_logado");
+    if (!email) return;
+
+    const db = getDB();
+    const user = db[email];
+
+    document.getElementById("loginBox").style.display = "none";
+    document.getElementById("app").style.display = "block";
+
+    document.getElementById("userEmail").innerText = user.email;
+
+    if (user.vip) {
+        document.getElementById("vipStatus").innerText = "VIP";
+        document.getElementById("vipStatus").classList.add("vip");
+        document.getElementById("vipSection").style.display = "block";
+    } else {
+        document.getElementById("vipStatus").innerText = "FREE";
+    }
+}
+
+// Gerador de sensibilidade
+window.gerarSensi = function () {
+    const modelo = document.getElementById("modeloCelular").value.trim();
+    const resultado = document.getElementById("resultadoSensi");
+
+    if (!modelo) {
+        resultado.innerHTML = "<p>❌ Digite o modelo do celular.</p>";
+        return;
+    }
+
+    const sensi = {
+        geral: Math.floor(Math.random() * 50) + 50,
+        redDot: Math.floor(Math.random() * 40) + 60,
+        mira2x: Math.floor(Math.random() * 30) + 50,
+        mira4x: Math.floor(Math.random() * 20) + 40,
+        awm: Math.floor(Math.random() * 10) + 30
+    };
+
+    resultado.innerHTML = `
+        <p>📱 <strong>${modelo}</strong></p>
+        <p>🎯 Geral: ${sensi.geral}%</p>
+        <p>🔴 Red Dot: ${sensi.redDot}%</p>
+        <p>🔭 Mira 2x: ${sensi.mira2x}%</p>
+        <p>🎯 Mira 4x: ${sensi.mira4x}%</p>
+        <p>💥 AWM: ${sensi.awm}%</p>
     `;
 };
-getRedirectResult(auth).catch(() => {});
+
+// Auto login
+carregarUsuario();
