@@ -8,8 +8,16 @@ import {
     onAuthStateChanged, 
     signOut 
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { 
+    getFirestore, 
+    doc, 
+    getDoc, 
+    setDoc 
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+/* ===============================
+   CONFIG FIREBASE
+================================ */
 const firebaseConfig = {
     apiKey: "AIzaSyBXrz_LFG44evIKLVBjYk4dYhaO9T2-FE0",
     authDomain: "zeze-da-sensi-ofc.firebaseapp.com",
@@ -18,34 +26,71 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+
 export const auth = getAuth(app);
 export const db = getFirestore(app);
-const provider = new GoogleAuthProvider();
 
+/* ===============================
+   PROVIDER GOOGLE
+================================ */
+const provider = new GoogleAuthProvider();
+provider.setCustomParameters({
+    prompt: "select_account"
+});
+
+/* ===============================
+   LOGIN
+================================ */
 export async function loginGoogle() {
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    if (isMobile) {
-        await signInWithRedirect(auth, provider);
-    } else {
-        await signInWithPopup(auth, provider);
+    try {
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+        if (isMobile) {
+            await signInWithRedirect(auth, provider);
+        } else {
+            await signInWithPopup(auth, provider);
+        }
+    } catch (err) {
+        console.error("Erro no login Google:", err);
     }
 }
 
-getRedirectResult(auth).catch(() => {});
+/* ===============================
+   REDIRECT RESULT (MOBILE)
+================================ */
+getRedirectResult(auth)
+    .then((result) => {
+        if (result && result.user) {
+            console.log("Login redirect OK:", result.user.email);
+        }
+    })
+    .catch((error) => {
+        console.error("Erro redirect:", error);
+    });
 
+/* ===============================
+   LOGOUT
+================================ */
 export async function logout() {
     await signOut(auth);
     location.reload();
 }
 
+/* ===============================
+   AUTH OBSERVER
+================================ */
 export function watchAuth(callback) {
     onAuthStateChanged(auth, async (user) => {
         callback(user);
     });
 }
 
+/* ===============================
+   USER FIRESTORE
+================================ */
 export async function getOrCreateUser(user) {
     if (!user) return null;
+
     const userRef = doc(db, "users", user.uid);
     const userSnap = await getDoc(userRef);
 
@@ -58,5 +103,6 @@ export async function getOrCreateUser(user) {
         await setDoc(userRef, newData);
         return newData;
     }
+
     return userSnap.data();
 }
